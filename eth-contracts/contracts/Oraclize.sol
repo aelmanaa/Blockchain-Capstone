@@ -24,7 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 */
-pragma solidity >= 0.5.0; // Incompatible compiler version - please select a compiler within the stated pragma range, or use a different version of the oraclizeAPI!
+// "SPDX-License-Identifier: MIYA"
+pragma solidity ^0.8.0; // Incompatible compiler version - please select a compiler within the stated pragma range, or use a different version of the oraclizeAPI!
 
 // Dummy contract only used to emit to end-user they are using wrong solc
 contract solcChecker {
@@ -35,7 +36,7 @@ contract OraclizeI {
 
     address public cbAddress;
 
-    function setProofType(byte _proofType) external;
+    function setProofType(bytes8 _proofType) external;
     function setCustomGasPrice(uint _gasPrice) external;
     function getPrice(string memory _datasource) public returns (uint _dsprice);
     function randomDS_getSessionPubKeyHash() external view returns (bytes32 _sessionKeyHash);

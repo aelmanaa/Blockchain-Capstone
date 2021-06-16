@@ -108,7 +108,7 @@ abstract contract ERC165 {
      * @dev internal method for registering an interface
      */
     function _registerInterface(bytes4 interfaceId) internal {
-        require(interfaceId != 0xffffffff);
+        require(interfaceId != 0xffffffff, "InterfaceID not correct");
         _supportedInterfaces[interfaceId] = true;
     }
 }
@@ -171,7 +171,7 @@ contract ERC721 is Pausable, ERC165 {
     }
 
     //    @dev Approves another address to transfer the given token ID
-    function approve(address to, uint256 tokenId) public {
+    function approve(address to, uint256 tokenId) public whenNotPaused {
         address owner = ownerOf(tokenId);
         require(to != owner, "Destination cannot be the current owner");
 
@@ -194,7 +194,7 @@ contract ERC721 is Pausable, ERC165 {
      * @param to operator address to set the approval
      * @param approved representing the status of the approval to be set
      */
-    function setApprovalForAll(address to, bool approved) public {
+    function setApprovalForAll(address to, bool approved) public whenNotPaused {
         require(to != msg.sender, "Caller cannot set approval for himself");
         _operatorApprovals[msg.sender][to] = approved;
         emit ApprovalForAll(msg.sender, to, approved);
@@ -218,8 +218,11 @@ contract ERC721 is Pausable, ERC165 {
         address from,
         address to,
         uint256 tokenId
-    ) public {
-        require(_isApprovedOrOwner(msg.sender, tokenId));
+    ) public whenNotPaused {
+        require(
+            _isApprovedOrOwner(msg.sender, tokenId),
+            "Account not approved or owner"
+        );
 
         _transferFrom(from, to, tokenId);
     }
@@ -228,7 +231,7 @@ contract ERC721 is Pausable, ERC165 {
         address from,
         address to,
         uint256 tokenId
-    ) public {
+    ) public whenNotPaused {
         safeTransferFrom(from, to, tokenId, "");
     }
 
@@ -237,9 +240,12 @@ contract ERC721 is Pausable, ERC165 {
         address to,
         uint256 tokenId,
         bytes memory _data
-    ) public {
+    ) public whenNotPaused {
         transferFrom(from, to, tokenId);
-        require(_checkOnERC721Received(from, to, tokenId, _data));
+        require(
+            _checkOnERC721Received(from, to, tokenId, _data),
+            "Cannot transfer ERC721 to this account"
+        );
     }
 
     /**
@@ -574,7 +580,7 @@ contract ERC721Metadata is ERC721Enumerable, usingProvable {
         return _baseTokenURI;
     }
 
-    function tokenURI(uint256 tokenId) external view returns (string memory) {
+    function tokenURI(uint256 tokenId) public view returns (string memory) {
         require(_exists(tokenId), "TokenID does not exist");
         return _tokenURIs[tokenId];
     }
@@ -584,6 +590,7 @@ contract ERC721Metadata is ERC721Enumerable, usingProvable {
     }
 
     function _setTokenURI(uint256 tokenId, string memory token_URI) internal {
+        require(_exists(tokenId), "TokenID does not exist");
         require(bytes(token_URI).length > 0, "tokenURI not valid");
         _tokenURIs[tokenId] = token_URI;
     }
@@ -598,12 +605,9 @@ contract MiyaERC721Token is ERC721Metadata {
         )
     {}
 
-    function mint(
-        address to,
-        uint256 tokenId,
-        string memory tokenURI
-    ) public onlyOwner returns (bool) {
+    function mint(address to, uint256 tokenId) public onlyOwner whenNotPaused returns (bool) {
         super._mint(to, tokenId);
+        string memory tokenURI = super._tokenURI(tokenId);
         super._setTokenURI(tokenId, tokenURI);
         return true;
     }

@@ -16,6 +16,9 @@
   "dependencies": {
     "@openzeppelin/contracts": "4.1.0",
     "solc": "0.8.4",
-    "solc-js": "1.0.1"
+    "solc-js": "1.0.1",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "@openzeppelin/test-helpers": "^0.5.11"
   }
 }

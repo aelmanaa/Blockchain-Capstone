@@ -1,2 +1,8 @@
 node_modules
 build
+proof.json
+out
+abi.json
+proving.key
+verification.key
+witness

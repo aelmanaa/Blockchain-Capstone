@@ -40,13 +40,13 @@ module.exports = async callback => {
 
         // mint tokens 1 , 4, 9 ...etc
         for (let i = 1; i < 11; i++) {
-            console.log(`Adding solution for token ${i * i}`)
+            console.log(`Adding solution for token ${i}`)
             witness = (zokratesProvider.computeWitness(artifacts, [i.toString(), (i * i).toString()])).witness
             proof = zokratesProvider.generateProof(artifacts.program, witness, provingKey)
-            result = await methods.addSolution(proof.proof.a, proof.proof.b, proof.proof.c, (i * i)).send({ from: account_two })
+            result = await methods.addSolution(proof.proof.a, proof.proof.b, proof.proof.c, i).send({ from: account_two })
             console.log('Solution added ', result)
-            console.log(`Minting token ${i * i}`)
-            result = await methods.mint(account_two, (i * i)).send({ from: account_one })
+            console.log(`Minting token ${i}`)
+            result = await methods.mint(account_two, i).send({ from: account_one })
             console.log('Token Minted ', result)
 
         }

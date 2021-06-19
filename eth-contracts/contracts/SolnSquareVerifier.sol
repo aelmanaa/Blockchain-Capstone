@@ -3,8 +3,11 @@ pragma solidity ^0.8.0;
 
 import "./Verifier.sol";
 import "./ERC721Mintable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract SolnSquareVerifier is MiyaERC721Token {
+    using SafeMath for uint256;
+
     struct Solution {
         uint256 tokenId;
         bytes32 index;
@@ -34,7 +37,7 @@ contract SolnSquareVerifier is MiyaERC721Token {
         uint256 tokenId
     ) public whenNotPaused {
         uint256[2] memory input;
-        input[0] = tokenId;
+        input[0] = tokenId.mul(tokenId);
         input[1] = 1;
         bytes32 index = keccak256(abi.encodePacked(a, b, c, input));
         require(
@@ -46,10 +49,7 @@ contract SolnSquareVerifier is MiyaERC721Token {
             "This token was already verified"
         );
 
-        require(
-            verifier.verifyTx(a, b, c, input),
-            "Provided proof is wrong"
-        );
+        require(verifier.verifyTx(a, b, c, input), "Provided proof is wrong");
 
         Solution memory solution;
         solution.tokenId = tokenId;

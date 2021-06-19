@@ -551,28 +551,28 @@ contract ERC721Metadata is ERC721Enumerable, usingProvable {
      */
 
     constructor(
-        string memory name,
-        string memory symbol,
-        string memory baseTokenURI
+        string memory name_,
+        string memory symbol_,
+        string memory baseTokenURI_
     ) {
         require(
-            bytes(name).length > 0 &&
-                bytes(symbol).length > 0 &&
-                bytes(baseTokenURI).length > 0,
+            bytes(name_).length > 0 &&
+                bytes(symbol_).length > 0 &&
+                bytes(baseTokenURI_).length > 0,
             "Contract init is not correct"
         );
-        _name = name;
-        _symbol = symbol;
-        _baseTokenURI = baseTokenURI;
+        _name = name_;
+        _symbol = symbol_;
+        _baseTokenURI = baseTokenURI_;
 
         _registerInterface(_INTERFACE_ID_ERC721_METADATA);
     }
 
-    function getName() public view returns (string memory) {
+    function name() public view returns (string memory) {
         return _name;
     }
 
-    function getSymbol() public view returns (string memory) {
+    function symbol() public view returns (string memory) {
         return _symbol;
     }
 
@@ -590,7 +590,6 @@ contract ERC721Metadata is ERC721Enumerable, usingProvable {
         require(_exists(tokenId), "Token does not exist");
         _tokenURIs[tokenId] = strConcat(_baseTokenURI, uint2str(tokenId));
     }
-
 }
 
 contract MiyaERC721Token is ERC721Metadata {
@@ -602,7 +601,13 @@ contract MiyaERC721Token is ERC721Metadata {
         )
     {}
 
-    function mint(address to, uint256 tokenId) public virtual onlyOwner whenNotPaused returns (bool) {
+    function mint(address to, uint256 tokenId)
+        public
+        virtual
+        onlyOwner
+        whenNotPaused
+        returns (bool)
+    {
         super._mint(to, tokenId);
         super.setTokenURI(tokenId);
         return true;

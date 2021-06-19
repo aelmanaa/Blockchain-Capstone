@@ -34,8 +34,8 @@ contract('TestERC721Mintable', accounts => {
         })
 
         it('verify instatiation', async () => {
-            let contractName = await contract.getName()
-            let contractSymbol = await contract.getSymbol()
+            let contractName = await contract.name()
+            let contractSymbol = await contract.symbol()
             let contractBaseTokenURI = await contract.getBaseTokenURI()
             //verify
 

@@ -605,7 +605,7 @@ contract MiyaERC721Token is ERC721Metadata {
         )
     {}
 
-    function mint(address to, uint256 tokenId) public onlyOwner whenNotPaused returns (bool) {
+    function mint(address to, uint256 tokenId) public virtual onlyOwner whenNotPaused returns (bool) {
         super._mint(to, tokenId);
         string memory tokenURI = super._tokenURI(tokenId);
         super._setTokenURI(tokenId, tokenURI);

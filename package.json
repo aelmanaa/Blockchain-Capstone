@@ -20,6 +20,8 @@
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "@openzeppelin/test-helpers": "^0.5.11",
-    "zokrates-js": "^1.0.32"
+    "zokrates-js": "^1.0.32",
+    "@truffle/hdwallet-provider": "^1.4.0",
+    "dotenv": "^10.0.0"
   }
 }

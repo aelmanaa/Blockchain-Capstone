@@ -585,15 +585,12 @@ contract ERC721Metadata is ERC721Enumerable, usingProvable {
         return _tokenURIs[tokenId];
     }
 
-    function _tokenURI(uint256 tokenId) internal view returns (string memory) {
-        return strConcat(_baseTokenURI, uint2str(tokenId));
+    function setTokenURI(uint256 tokenId) internal {
+        // require the token exists before setting
+        require(_exists(tokenId), "Token does not exist");
+        _tokenURIs[tokenId] = strConcat(_baseTokenURI, uint2str(tokenId));
     }
 
-    function _setTokenURI(uint256 tokenId, string memory token_URI) internal {
-        require(_exists(tokenId), "TokenID does not exist");
-        require(bytes(token_URI).length > 0, "tokenURI not valid");
-        _tokenURIs[tokenId] = token_URI;
-    }
 }
 
 contract MiyaERC721Token is ERC721Metadata {
@@ -607,8 +604,7 @@ contract MiyaERC721Token is ERC721Metadata {
 
     function mint(address to, uint256 tokenId) public virtual onlyOwner whenNotPaused returns (bool) {
         super._mint(to, tokenId);
-        string memory tokenURI = super._tokenURI(tokenId);
-        super._setTokenURI(tokenId, tokenURI);
+        super.setTokenURI(tokenId);
         return true;
     }
 }
